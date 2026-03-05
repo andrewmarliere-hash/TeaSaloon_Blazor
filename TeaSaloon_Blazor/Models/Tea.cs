@@ -6,6 +6,6 @@
         public bool IsIced { get; set; }
 
         public ICollection<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
-
+        
     }
 }

@@ -1,4 +1,7 @@
 ﻿@page "/Categories"
+@using TeaSaloon_API.Models
+
+@inject TeaSaloon_Blazor.Services.CategoryService CategoryService
 
 <h3>CategoriesList</h3>
 
@@ -10,13 +13,35 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Black Tea</td>
-        </tr>
+        @if(categories_dans_API != null)
+        @foreach(Category cat in categories_dans_API)
+        {
+            <tr>
+                <th scope="row">@cat.CategoryID</th>
+                <td>@cat.Name</td>
+            </tr>
+        }
+        
     </tbody>
 </table>
 
 @code {
 
+    //Category : fait référence à la classe
+        // ici on crée une liste de type Category
+    //categories : c'est simplement le nom que je donne à ma liste
+        //j'aurais très bien pu l'appeler "toutes_les_catégories"
+    List<Category>? categories_dans_API;
+    string ErrorMessage;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            categories_dans_API = await CategoryService.GetAllAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
 }

@@ -1,4 +1,5 @@
 using TeaSaloon_Blazor.Components;
+using TeaSaloon_Blazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +7,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddHttpClient("API", client =>
+{
+
+    client.BaseAddress = new Uri("https://localhost:7044/api/");
+
+});
+
+builder.Services.AddSingleton<TeaService>();
+builder.Services.AddSingleton<IngredientService>();
+builder.Services.AddSingleton<ProductService>();
+builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<CategoryService>();
+
 var app = builder.Build();
+
+
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

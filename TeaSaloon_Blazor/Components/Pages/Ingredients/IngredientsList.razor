@@ -1,4 +1,8 @@
 ﻿@page "/Ingredients"
+@using TeaSaloon_API.Models
+
+@inject TeaSaloon_Blazor.Services.IngredientService IngredientService
+
 
 <h3>IngredientsList</h3>
 
@@ -13,16 +17,34 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Sugar</td>
-            <td>0.2</td>
-            <td>0.5</td>
-            <td>sugar.png</td>
-        </tr>
+        @if (ingredients_dans_API != null)
+        @foreach (Ingredient ing in ingredients_dans_API)
+            {
+                <tr>
+                    <th scope="row">@ing.IngredientID</th>
+                    <td>@ing.Name</td>
+                    <td>@ing.SuplementPrice</td>
+                    <td>@ing.Price</td>
+                    <td>@ing.Image</td>
+                </tr>
+
+            }
+        
     </tbody>
 </table>
 
 @code {
-
+    List<Ingredient>? ingredients_dans_API;
+    string ErrorMessage;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ingredients_dans_API = await IngredientService.GetAllAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
 }
